@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BadHabitsStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="BadHabitsStoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Accounts" EntityType="BadHabitsStoreModel.Account" />
+    <EntitySet Name="Categories" EntityType="BadHabitsStoreModel.Category" />
+    <EntitySet Name="Customers" EntityType="BadHabitsStoreModel.Customer" />
+    <EntitySet Name="Photos" EntityType="BadHabitsStoreModel.Photo" />
+    <EntitySet Name="Products" EntityType="BadHabitsStoreModel.Product" />
+    <EntitySet Name="Purchases" EntityType="BadHabitsStoreModel.Purchase" />
+    <EntitySet Name="PurchaseDetails" EntityType="BadHabitsStoreModel.PurchaseDetail" />
+    <EntitySet Name="PurchaseStatusEnums" EntityType="BadHabitsStoreModel.PurchaseStatusEnum" />
+    <AssociationSet Name="FK_Product_Category" Association="BadHabitsStoreModel.FK_Product_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Purchase_Customer" Association="BadHabitsStoreModel.FK_Purchase_Customer">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Photo_Product" Association="BadHabitsStoreModel.FK_Photo_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Photo" EntitySet="Photos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseDetail_Product" Association="BadHabitsStoreModel.FK_PurchaseDetail_Product">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="PurchaseDetail" EntitySet="PurchaseDetails" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Purchase_PurchaseStatusEnum" Association="BadHabitsStoreModel.FK_Purchase_PurchaseStatusEnum">
+      <End Role="PurchaseStatusEnum" EntitySet="PurchaseStatusEnums" />
+      <End Role="Purchase" EntitySet="Purchases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PurchaseDetail_Purchase" Association="BadHabitsStoreModel.FK_PurchaseDetail_Purchase">
+      <End Role="Purchase" EntitySet="Purchases" />
+      <End Role="PurchaseDetail" EntitySet="PurchaseDetails" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="username" />
+    </Key>
+    <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="rolename" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Category_ID" />
+    </Key>
+    <Property Name="Category_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Products" Relationship="BadHabitsStoreModel.FK_Product_Category" FromRole="Category" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Tel" />
+    </Key>
+    <Property Name="Customer_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tel" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Purchases" Relationship="BadHabitsStoreModel.FK_Purchase_Customer" FromRole="Customer" ToRole="Purchase" />
+  </EntityType>
+  <EntityType Name="Photo">
+    <Key>
+      <PropertyRef Name="Photo_id" />
+    </Key>
+    <Property Name="Photo_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="Product_id" Type="Int32" />
+    <NavigationProperty Name="Product" Relationship="BadHabitsStoreModel.FK_Photo_Product" FromRole="Photo" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Product_ID" />
+    </Key>
+    <Property Name="Product_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Catgory_ID" Type="Int32" />
+    <Property Name="Product_Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Price" Type="Int32" />
+    <NavigationProperty Name="Category" Relationship="BadHabitsStoreModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
+    <NavigationProperty Name="Photos" Relationship="BadHabitsStoreModel.FK_Photo_Product" FromRole="Product" ToRole="Photo" />
+    <NavigationProperty Name="PurchaseDetails" Relationship="BadHabitsStoreModel.FK_PurchaseDetail_Product" FromRole="Product" ToRole="PurchaseDetail" />
+  </EntityType>
+  <EntityType Name="Purchase">
+    <Key>
+      <PropertyRef Name="Purchase_ID" />
+    </Key>
+    <Property Name="Purchase_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Total" Type="Int32" />
+    <Property Name="Created_At" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="Customer_Tel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Customer" Relationship="BadHabitsStoreModel.FK_Purchase_Customer" FromRole="Purchase" ToRole="Customer" />
+    <NavigationProperty Name="PurchaseStatusEnum" Relationship="BadHabitsStoreModel.FK_Purchase_PurchaseStatusEnum" FromRole="Purchase" ToRole="PurchaseStatusEnum" />
+    <NavigationProperty Name="PurchaseDetails" Relationship="BadHabitsStoreModel.FK_PurchaseDetail_Purchase" FromRole="Purchase" ToRole="PurchaseDetail" />
+  </EntityType>
+  <EntityType Name="PurchaseDetail">
+    <Key>
+      <PropertyRef Name="PurchaseDetail_ID" />
+    </Key>
+    <Property Name="PurchaseDetail_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Purchase_ID" Type="Int32" />
+    <Property Name="Product_ID" Type="Int32" />
+    <Property Name="Price" Type="Int32" />
+    <Property Name="Quantity" Type="Int32" />
+    <Property Name="Total" Type="Int32" />
+    <NavigationProperty Name="Product" Relationship="BadHabitsStoreModel.FK_PurchaseDetail_Product" FromRole="PurchaseDetail" ToRole="Product" />
+    <NavigationProperty Name="Purchase" Relationship="BadHabitsStoreModel.FK_PurchaseDetail_Purchase" FromRole="PurchaseDetail" ToRole="Purchase" />
+  </EntityType>
+  <EntityType Name="PurchaseStatusEnum">
+    <Key>
+      <PropertyRef Name="Value" />
+    </Key>
+    <Property Name="EnumKey" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Value" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Display_Text" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Purchases" Relationship="BadHabitsStoreModel.FK_Purchase_PurchaseStatusEnum" FromRole="PurchaseStatusEnum" ToRole="Purchase" />
+  </EntityType>
+  <Association Name="FK_Product_Category">
+    <End Type="BadHabitsStoreModel.Category" Role="Category" Multiplicity="0..1" />
+    <End Type="BadHabitsStoreModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Category_ID" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="Catgory_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Purchase_Customer">
+    <End Type="BadHabitsStoreModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="BadHabitsStoreModel.Purchase" Role="Purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Tel" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="Customer_Tel" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Photo_Product">
+    <End Type="BadHabitsStoreModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="BadHabitsStoreModel.Photo" Role="Photo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="Photo">
+        <PropertyRef Name="Product_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseDetail_Product">
+    <End Type="BadHabitsStoreModel.Product" Role="Product" Multiplicity="0..1" />
+    <End Type="BadHabitsStoreModel.PurchaseDetail" Role="PurchaseDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Product_ID" />
+      </Principal>
+      <Dependent Role="PurchaseDetail">
+        <PropertyRef Name="Product_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Purchase_PurchaseStatusEnum">
+    <End Type="BadHabitsStoreModel.PurchaseStatusEnum" Role="PurchaseStatusEnum" Multiplicity="0..1" />
+    <End Type="BadHabitsStoreModel.Purchase" Role="Purchase" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PurchaseStatusEnum">
+        <PropertyRef Name="Value" />
+      </Principal>
+      <Dependent Role="Purchase">
+        <PropertyRef Name="Status" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PurchaseDetail_Purchase">
+    <End Type="BadHabitsStoreModel.Purchase" Role="Purchase" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="BadHabitsStoreModel.PurchaseDetail" Role="PurchaseDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Purchase">
+        <PropertyRef Name="Purchase_ID" />
+      </Principal>
+      <Dependent Role="PurchaseDetail">
+        <PropertyRef Name="Purchase_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

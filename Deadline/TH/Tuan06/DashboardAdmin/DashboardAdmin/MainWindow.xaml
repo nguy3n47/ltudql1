@@ -1,0 +1,167 @@
+﻿<Window x:Class="DashboardAdmin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DashboardAdmin"
+        xmlns:Fluent="clr-namespace:Fluent;assembly=Fluent" 
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1280" WindowStartupLocation="CenterScreen" Loaded="RibbonWindow_Loaded">
+    <Window.Resources>
+        <local:ByteArrayToImageConverter x:Key="byteArrayToImage"></local:ByteArrayToImageConverter>
+        <local:PriceConverter x:Key="PriceConverter"/>
+    </Window.Resources>
+    <DockPanel LastChildFill="True">
+        <Fluent:Ribbon DockPanel.Dock="Top">
+            <Fluent:Ribbon.Menu>
+                <Fluent:Backstage Header="My Shop" >
+                    <Fluent:BackstageTabControl>
+                        <Fluent:BackstageTabItem Header="Info">
+                            <Label Content="INFO"/>
+                        </Fluent:BackstageTabItem>
+                        <Fluent:BackstageTabItem Header="Exit" MouseLeftButtonDown="exitMenu_MouseLeftButtonDown" />
+                    </Fluent:BackstageTabControl>
+                </Fluent:Backstage>
+            </Fluent:Ribbon.Menu>
+
+            <Fluent:RibbonTabItem Header="Master data">
+                <Fluent:RibbonGroupBox Header="Import">
+                    <Fluent:Button Header="Excel" Click="excelImportButton_Clicked">
+                        <Fluent:Button.LargeIcon >
+                            <Image Source="/Images/excel.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Category">
+                    <Fluent:Button Header="Add" Click="addCategoryButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/plus.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Update" Click="updateCategoryButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/update.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Delete" Click="deleteCategoryButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/cancel.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
+
+                <Fluent:RibbonGroupBox Header="Product">
+                    <Fluent:Button Header="Add" Click="addProductButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/add.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Update" Click="updateProductButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/edit.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                    <Fluent:Button Header="Delete" Click="deleteProductButton_Clicked">
+                        <Fluent:Button.LargeIcon>
+                            <Image Source="/Images/x-button.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Fluent:Button.LargeIcon>
+                    </Fluent:Button>
+                </Fluent:RibbonGroupBox>
+
+            </Fluent:RibbonTabItem>
+
+            <Fluent:RibbonTabItem Header="Sale">
+            </Fluent:RibbonTabItem>
+
+            <Fluent:RibbonTabItem Header="Report">
+            </Fluent:RibbonTabItem>
+        </Fluent:Ribbon>
+        <DockPanel>
+            <StatusBar Name="status" DockPanel.Dock="Bottom" Height="40">
+
+                <Label Name="statusLabel" Width="400"/>
+
+            </StatusBar>
+            <DockPanel >
+                <StackPanel Orientation="Horizontal" Height="40" DockPanel.Dock="Top" >
+                    <ComboBox SelectionChanged="ComboBox_SelectionChanged" Name="categoriesComboBox" Width="200" Height="30" Margin="8, 0, 0, 0">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Padding="3, 4, 0 , 0" Foreground="Blue" FontWeight="Bold" Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Margin="10,5,5,5" RenderOptions.BitmapScalingMode="HighQuality" Source="/Images/magnifying-glass.png" Width="25"/>
+                        <TextBox Padding="5, 5, 0, 0" x:Name="keywordTextBox" TextChanged="keywordTextBox_TextChanged" Height="30" Width="400"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Name="filter" MouseLeftButtonDown="filter_MouseLeftButtonDown" Source="Images/filter.png" DockPanel.Dock="Left" Width="30" Height="30" RenderOptions.BitmapScalingMode="HighQuality" Margin="10,0,0,0"></Image>
+                        <TextBlock VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Height="40" DockPanel.Dock="Bottom" Background="Green">
+
+                </StackPanel>
+                <Grid Height="40" DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Margin="10 0 0 0" HorizontalAlignment="Left">
+                        <TextBlock Padding="8" Name="statusTextBlock" Width="300" FontSize="16"></TextBlock>
+                    </Grid>
+                    <StackPanel Grid.ColumnSpan="2" Height="40" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Previous" Click="previousButton_Click" Width="80" Margin="0,0,10,0"></Button>
+                        <ComboBox Width="100" Name="pagesComboBox" SelectionChanged="pagesComboBox_SelectionChanged">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                        <TextBlock Text="Page" Padding="8"/>
+                                        <TextBlock Text="{Binding Page}" Padding="0,8"/>
+                                        <TextBlock Text=" / " Padding="0,8"/>
+                                        <TextBlock Text="{Binding TotalPages}" Padding="0,8"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Content="Next" Click="nextButton_Click" Width="80" Margin="10 0 0 0"></Button>
+                    </StackPanel>
+                </Grid>
+                <DockPanel>
+                    <StackPanel Name="filterOptions" Visibility="Visible" Background="Red" DockPanel.Dock="Left" Width="180" Panel.ZIndex="1">
+                        <TextBlock Padding="8" Text="Giá" Foreground="White" FontSize="18"></TextBlock>
+                        <ListView Name="listViewPriceFilter" SelectionChanged="listViewPriceFilter_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock FontSize="18" Text="{Binding Text}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        <Button Name="unselectFilter" Click="unselectFilter_Click" Margin="0 10" Height="30" FontSize="16" Width="110" Content="Unselect Filter"></Button>
+                    </StackPanel>
+                    <ListView Name="productsListView" ScrollViewer.VerticalScrollBarVisibility ="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" BorderBrush="Black" SelectionChanged="productsListView_SelectionChanged">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Image Source="{Binding Thumbnail, Converter={StaticResource byteArrayToImage}, Mode=OneTime}" Height="305" Width="305" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                                    <TextBlock FontSize="18" Text="{Binding Name, Mode=OneTime}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock FontSize="18" Foreground="Red" Text="{Binding Price, Converter={StaticResource PriceConverter}, Mode=OneTime}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DockPanel>
+            </DockPanel>
+        </DockPanel>
+    </DockPanel>
+</Window>

@@ -1,0 +1,110 @@
+﻿<Window
+    x:Class="POSApp.SaleWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+    xmlns:local="clr-namespace:POSApp"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title=""
+    Width="1366"
+    Height="800"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Loaded="Window_Loaded"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <DockPanel LastChildFill="True">
+        <Grid Background="White" DockPanel.Dock="Top">
+            <Image
+                Margin="0,10,95,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="Assets/logo.png" />
+            <StackPanel
+                Height="160"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Border
+                    Name="masterDataBorder"
+                    Width="158.6"
+                    Height="54.4"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                    <Label
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="MASTER DATA"
+                        Cursor="Hand"
+                        FontSize="20"
+                        Foreground="Black"
+                        MouseLeftButtonDown="masterData_MouseLeftButtonDown" />
+                </Border>
+                <Border
+                    Name="transactionBorder"
+                    Width="180"
+                    Height="54.4"
+                    VerticalAlignment="Bottom"
+                    BorderBrush="Black"
+                    BorderThickness="0"
+                    CornerRadius="5">
+                    <Label
+                        Padding="15"
+                        VerticalAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="TRANSACTION"
+                        Cursor="Hand"
+                        FontSize="20"
+                        Foreground="Black"
+                        MouseLeftButtonDown="transactionData_MouseLeftButtonDown" />
+                </Border>
+            </StackPanel>
+            <StackPanel
+                Height="60"
+                Margin="0,30,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Border
+                    Width="60"
+                    HorizontalAlignment="Left"
+                    BorderBrush="Black"
+                    BorderThickness="2"
+                    CornerRadius="50">
+                    <Border.Background>
+                        <ImageBrush
+                            ImageSource="https://i.imgur.com/5F3mXvy.jpg"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Stretch="UniformToFill" />
+                    </Border.Background>
+                </Border>
+                <Border
+                    Width="28"
+                    Height="28"
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    Cursor="Hand"
+                    MouseLeftButtonDown="logout_MouseLeftButtonDown">
+                    <materialDesign:PackIcon
+                        Width="28"
+                        Height="28"
+                        Foreground="Black"
+                        Kind="Logout" />
+                </Border>
+            </StackPanel>
+        </Grid>
+        <TabControl Name="tabsContent" />
+    </DockPanel>
+</Window>

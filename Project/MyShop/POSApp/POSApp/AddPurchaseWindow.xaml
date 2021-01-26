@@ -1,0 +1,355 @@
+﻿<Window
+    x:Class="POSApp.AddPurchaseWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:POSApp"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title=""
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    Loaded="Window_Loaded"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Maximized"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <local:ByteArrayToImageConverter x:Key="byteArrayToImage" />
+        <local:PriceConverter x:Key="PriceConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.8*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" LastChildFill="True">
+            <StackPanel
+                Height="60"
+                Margin="20"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal">
+                <ComboBox
+                    Name="categoriesComboBox"
+                    Width="300"
+                    materialDesign:HintAssist.Hint="Category"
+                    FontSize="18"
+                    SelectionChanged="categoriesComboBox_SelectionChanged"
+                    Style="{StaticResource MaterialDesignFilledComboBox}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="16"
+                                    FontWeight="Bold"
+                                    Text="{Binding Category_Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel
+                Height="80"
+                HorizontalAlignment="Center"
+                DockPanel.Dock="Bottom"
+                Orientation="Horizontal">
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="10,0,10,0"
+                    Background="Black"
+                    BorderBrush="Black"
+                    Click="previousButton_Click"
+                    Style="{StaticResource MaterialDesignIconButton}">
+                    <materialDesign:PackIcon
+                        Width="20"
+                        Height="20"
+                        Foreground="White"
+                        Kind="ArrowLeft" />
+                </Button>
+                <ComboBox
+                    Name="pagesComboBox"
+                    Width="150"
+                    Height="40"
+                    FontSize="18"
+                    SelectionChanged="pagesComboBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Page " />
+                                <TextBlock Text="{Binding Page}" />
+                                <TextBlock Text=" / " />
+                                <TextBlock Text="{Binding TotalPages}" />
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="10,0,10,0"
+                    Background="Black"
+                    BorderBrush="Black"
+                    Click="nextButton_Click"
+                    Style="{StaticResource MaterialDesignIconButton}">
+                    <materialDesign:PackIcon
+                        Width="20"
+                        Height="20"
+                        Foreground="White"
+                        Kind="ArrowRight" />
+                </Button>
+            </StackPanel>
+            <ListView
+                Name="productsListView"
+                BorderBrush="Black"
+                MouseDoubleClick="productsListView_MouseDoubleClick"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <EventSetter Event="MouseDoubleClick" Handler="OnMouseDoubleClick" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <Image
+                                Width="305"
+                                Height="305"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Source="{Binding Thumbnail, Converter={StaticResource byteArrayToImage}, Mode=OneTime}"
+                                Stretch="UniformToFill" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Text="{Binding Name, Mode=OneTime}" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="18"
+                                Foreground="black"
+                                Text="{Binding Price, Converter={StaticResource PriceConverter}, Mode=OneTime}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+        <ScrollViewer Grid.Column="1" Background="#FAFAFA">
+            <DockPanel LastChildFill="True">
+                <StackPanel
+                    Height="80"
+                    Margin="20,0,20,0"
+                    DockPanel.Dock="Top"
+                    Orientation="Horizontal">
+                    <Border
+                        Width="50"
+                        Height="50"
+                        CornerRadius="50">
+                        <Border.Background>
+                            <ImageBrush
+                                ImageSource="Assets/36efaa1db4ee7a1a52a9a05f811670da.png"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                Stretch="UniformToFill" />
+                        </Border.Background>
+                    </Border>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="28"
+                        Text="Bad Habits Store" />
+                </StackPanel>
+                <Grid
+                    Height="35"
+                    Margin="20,0,20,0"
+                    DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Grid
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center">
+                        <TextBlock Text="SẢN PHẨM" />
+                    </Grid>
+                    <Grid
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                        <TextBlock Text="Số lượng" />
+                    </Grid>
+                    <Grid
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center">
+                        <TextBlock Text="TỔNG" />
+                    </Grid>
+                </Grid>
+                <ListView
+                    x:Name="selectedProductsListView"
+                    Margin="10,0,20,0"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"
+                    DockPanel.Dock="Top"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid Grid.Column="0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button
+                                            Width="30"
+                                            Height="30"
+                                            Margin="0,0,5,0"
+                                            HorizontalAlignment="Left"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Click="buttonDeleteProduct_Click"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}">
+                                            <materialDesign:PackIcon
+                                                Width="30"
+                                                Height="30"
+                                                Foreground="Black"
+                                                Kind="CloseCircleOutline" />
+                                        </Button>
+
+                                        <Image
+                                            Width="80"
+                                            Height="80"
+                                            HorizontalAlignment="Left"
+                                            RenderOptions.BitmapScalingMode="HighQuality"
+                                            Source="{Binding Photo, Converter={StaticResource byteArrayToImage}}"
+                                            Stretch="UniformToFill" />
+                                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Product_Name}" />
+                                            <TextBlock Text="{Binding Unit_Price, Converter={StaticResource PriceConverter}}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                                <Grid
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Quantity}" />
+                                    </StackPanel>
+                                </Grid>
+                                <Grid
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                                    <StackPanel>
+                                        <TextBlock
+                                            FontWeight="Bold"
+                                            Foreground="Blue"
+                                            Text="{Binding SubTotal, Converter={StaticResource PriceConverter}}" />
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid
+                    Height="35"
+                    Margin="20,0,20,0"
+                    DockPanel.Dock="Top">
+                    <TextBlock
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Text="TỔNG CỘNG" />
+                    <TextBlock
+                        Name="totalTextBlock"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        FontWeight="Bold"
+                        Text="0 VNĐ" />
+                </Grid>
+                <StackPanel Margin="20,0,20,20">
+                    <TextBox
+                        x:Name="customerNameTextBox"
+                        Height="45"
+                        Margin="0,0,0,15"
+                        materialDesign:HintAssist.Hint="Họ và tên"
+                        AcceptsReturn="True"
+                        Background="White"
+                        FontSize="16"
+                        Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1.5*" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <TextBox
+                                x:Name="customerEmailTextBox"
+                                Height="45"
+                                Margin="0,0,10,15"
+                                materialDesign:HintAssist.Hint="Email"
+                                AcceptsReturn="True"
+                                Background="White"
+                                FontSize="16"
+                                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" />
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <TextBox
+                                x:Name="customerTelTextBox"
+                                Height="45"
+                                Margin="0,0,0,15"
+                                materialDesign:HintAssist.Hint="Số điện thoại"
+                                AcceptsReturn="True"
+                                Background="White"
+                                FontSize="16"
+                                MaxLength="10"
+                                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                                TextChanged="textBoxPhone_TextChanged" />
+                        </Grid>
+                    </Grid>
+                    <TextBox
+                        x:Name="customerAddressTextBox"
+                        Height="45"
+                        Margin="0,0,0,15"
+                        materialDesign:HintAssist.Hint="Địa chỉ"
+                        AcceptsReturn="True"
+                        Background="White"
+                        FontSize="16"
+                        Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}" />
+                    <Grid>
+                        <Button
+                            Width="130"
+                            Height="45"
+                            HorizontalAlignment="Right"
+                            Background="Black"
+                            BorderBrush="Black"
+                            Click="confirmButton_Click"
+                            Content="Hoàn thành"
+                            Foreground="White" />
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

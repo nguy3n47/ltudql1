@@ -1,0 +1,41 @@
+﻿<Window x:Class="ImportImageToSql.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImportImageToSql"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="810" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Window.Resources>
+        <local:ByteArrayToImageConverter x:Key="byteArrayToImage"></local:ByteArrayToImageConverter>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <ListView Name="datalistView" ScrollViewer.VerticalScrollBarVisibility ="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="10" BorderBrush="Black">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel></WrapPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Image Source="{Binding}" Height="100" Width="100" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                            <Image Source="{Binding Data, Converter={StaticResource byteArrayToImage}}" Height="100" Width="100" Stretch="UniformToFill" RenderOptions.BitmapScalingMode="HighQuality"></Image>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Name="upload" Content="Upload" Width="100" Click="upload_Click" Height="50" Margin="0,0,50,0"/>
+            <Button Name="import" Content="Import to SQL" Width="100" Click="import_Click" Height="50" Margin="0,0,50,0"/>
+            <Button Name="clear" Content="Clear" Width="100" Click="clear_Click" Height="50" Margin="0,0,50,0"/>
+            <Button Name="load" Content="Load" Width="100" Click="load_Click" Height="50"/>
+        </StackPanel>
+    </Grid>
+</Window>

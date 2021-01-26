@@ -1,0 +1,341 @@
+﻿<UserControl
+    x:Class="POSApp.TransactionUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:POSApp"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="1080"
+    d:DesignWidth="1920"
+    FontFamily="{DynamicResource MaterialDesignFont}"
+    Initialized="UserControl_Initialized"
+    TextElement.FontSize="13"
+    TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:ByteArrayToImageConverter x:Key="byteArrayToImage" />
+        <local:PriceConverter x:Key="PriceConverter" />
+    </UserControl.Resources>
+    <DockPanel
+        Name="transactionData"
+        Background="White"
+        LastChildFill="True">
+        <StackPanel
+            Height="60"
+            VerticalAlignment="Center"
+            DockPanel.Dock="Top"
+            Orientation="Horizontal">
+            <Button
+                Width="40"
+                Height="40"
+                Margin="10,0,10,0"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                BorderBrush="Black"
+                Click="addPurchaseButton_Click"
+                FontSize="18"
+                Foreground="Black"
+                Style="{StaticResource MaterialDesignIconButton}"
+                ToolTip="MaterialDesignIconButton">
+                <materialDesign:PackIcon
+                    Width="25"
+                    Height="25"
+                    Kind="Add" />
+            </Button>
+            <TextBlock
+                Height="24"
+                Margin="5,0,5,0"
+                Padding="2"
+                Text="Từ ngày:" />
+            <DatePicker
+                Name="fromDatePicker"
+                Width="120"
+                Height="30"
+                SelectedDateChanged="fromDatePicker_SelectedDateChanged"
+                TextOptions.TextHintingMode="Fixed" />
+            <TextBlock
+                Height="24"
+                Margin="5,0,5,0"
+                Padding="2"
+                Text="Đến ngày:" />
+            <DatePicker
+                Name="toDatePicker"
+                Width="120"
+                Height="30"
+                SelectedDateChanged="toDatePicker_SelectedDateChanged"
+                TextOptions.TextHintingMode="Fixed" />
+            <TextBlock
+                Height="24"
+                Margin="5,0,5,0"
+                Padding="2"
+                Text="Trạng thái đơn hàng:" />
+            <ComboBox
+                Name="purchaseStatesComboBox"
+                Width="100"
+                Height="30"
+                Margin="5,0,5,0"
+                SelectionChanged="purchaseStatesComboBox_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Padding="3" Text="{Binding Display_Text}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBox
+                x:Name="keywordTextBox"
+                Width="300"
+                Height="45"
+                Margin="20,0,0,0"
+                materialDesign:HintAssist.Hint="Search"
+                AcceptsReturn="True"
+                FontSize="16"
+                Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                TextChanged="keywordTextBox_TextChanged" />
+            <StackPanel
+                Height="40"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="10,0,10,0"
+                    Background="Black"
+                    BorderBrush="Black"
+                    Click="previousButton_Click"
+                    Style="{StaticResource MaterialDesignIconButton}">
+                    <materialDesign:PackIcon
+                        Width="20"
+                        Height="20"
+                        Foreground="White"
+                        Kind="ArrowLeft" />
+                </Button>
+                <ComboBox
+                    Name="pagesComboBox"
+                    Width="150"
+                    Height="40"
+                    FontSize="18"
+                    SelectionChanged="pagesComboBox_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <WrapPanel HorizontalAlignment="Center">
+                                <TextBlock Text="Page " />
+                                <TextBlock Text="{Binding Page}" />
+                                <TextBlock Text=" / " />
+                                <TextBlock Text="{Binding TotalPages}" />
+                            </WrapPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button
+                    Width="40"
+                    Height="40"
+                    Margin="10,0,10,0"
+                    Background="Black"
+                    BorderBrush="Black"
+                    Click="nextButton_Click"
+                    Style="{StaticResource MaterialDesignIconButton}">
+                    <materialDesign:PackIcon
+                        Width="20"
+                        Height="20"
+                        Foreground="White"
+                        Kind="ArrowRight" />
+                </Button>
+                <Grid Margin="20,0,0,0">
+                    <Border
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        CornerRadius="5" />
+                    <TextBlock
+                        x:Name="totalOrder"
+                        Grid.Column="0"
+                        Margin="10,0,10,0"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Text="Tổng số đơn hàng: " />
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        <DockPanel LastChildFill="True">
+            <ScrollViewer DockPanel.Dock="Right" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                <StackPanel Name="purchaseStackPanel" Visibility="Collapsed">
+                    <Grid>
+                        <Button
+                            Width="20"
+                            Height="20"
+                            Margin="15,15,0,0"
+                            HorizontalAlignment="Left"
+                            Background="Black"
+                            BorderBrush="Black"
+                            Click="closePurchaseStackPanel"
+                            Style="{StaticResource MaterialDesignIconButton}">
+                            <materialDesign:PackIcon
+                                Width="12"
+                                Height="12"
+                                Foreground="White"
+                                Kind="Close" />
+                        </Button>
+
+                        <TextBlock
+                            Margin="0,15,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="CHI TIẾT ĐƠN HÀNG" />
+                    </Grid>
+                    <DataGrid
+                        Name="purchaseDetail"
+                        AutoGenerateColumns="False"
+                        IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Tên sản phẩm">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image
+                                                Width="64"
+                                                Height="64"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                Source="{Binding Photo, Converter={StaticResource byteArrayToImage}}"
+                                                Stretch="UniformToFill" />
+                                            <TextBlock
+                                                Margin="5,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding Product_Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Giá">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Pirce, Converter={StaticResource PriceConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Số lượng">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Quantity}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Tổng">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Text="{Binding Total, Converter={StaticResource PriceConverter}}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid>
+                        <StackPanel>
+                            <TextBlock
+                                Name="_orderId"
+                                Margin="20,20,20,20"
+                                FontSize="28"
+                                Foreground="Black"
+                                Text="Mã đơn hàng: #"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Name="_orderName"
+                                Margin="20,0,0,20"
+                                FontSize="20"
+                                Foreground="Black"
+                                Text="○ Tên khách hàng: "
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Name="_orderDate"
+                                Margin="20,0,0,20"
+                                FontSize="20"
+                                Foreground="Black"
+                                Text="○ Ngày tạo: "
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Name="_orderPhone"
+                                Margin="20,0,0,20"
+                                FontSize="20"
+                                Foreground="Black"
+                                Text="○ Số điện thoại: "
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Name="_orderAddress"
+                                Width="550"
+                                Margin="20,0,20,20"
+                                FontSize="20"
+                                Foreground="Black"
+                                Text="○ Địa chỉ giao hàng: "
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Name="_orderTotal"
+                                Margin="20,0,0,20"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="Black"
+                                Text="○ Tổng cộng: "
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                        <Rectangle
+                            Margin="10"
+                            RadiusX="10"
+                            RadiusY="10"
+                            Stroke="Black"
+                            StrokeDashArray="3"
+                            StrokeThickness="2" />
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock
+                    Margin="0,15,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Text="DANH SÁCH ĐƠN HÀNG" />
+                <DataGrid
+                    Name="purchaseDataGrid"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    IsReadOnly="True"
+                    SelectionChanged="purchaseDataGrid_SelectedCellsChanged">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding OrderID}" Header="Mã đơn hàng" />
+                        <DataGridTextColumn Binding="{Binding Customer_Name}" Header="Tên khách hàng" />
+                        <DataGridTextColumn Binding="{Binding Tel}" Header="Số điện thoại" />
+                        <DataGridTextColumn Binding="{Binding Address}" Header="Địa chỉ" />
+                        <DataGridTextColumn Binding="{Binding Created_At}" Header="Ngày tạo" />
+                        <DataGridTextColumn Binding="{Binding Total, Converter={StaticResource PriceConverter}}" Header="Tổng tiền" />
+                        <DataGridTextColumn Binding="{Binding Display_Text}" Header="Trạng thái đơn hàng" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Click="editPurchase_MenuItem_Click" Header="Edit">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="Edit" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Click="deletePurchase_MenuItem_Click" Header="Delete">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="Delete" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                </DataGrid>
+            </StackPanel>
+        </DockPanel>
+    </DockPanel>
+</UserControl>
